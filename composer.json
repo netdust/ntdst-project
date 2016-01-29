@@ -1,0 +1,38 @@
+{
+  "name": "netdust-project",
+  "description": "a netdust web project for faster development",
+  "keywords": [
+    "netdust",
+    "cms",
+    "admin",
+    "gulp",
+    "bower",
+    "composer",
+    "less",
+    "slim-php"
+  ],
+  "homepage": "https://github.com/netdust",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Stefan Vandermeulen",
+      "email": "stefan@netdust.be",
+      "homepage": "http://netdust.be"
+    }
+  ],
+  "type": "cms,web",
+  "archive": {
+    "exclude": ["/src", "/test*",  ".DS_Store", "*.log"]
+  },
+  "require": {
+
+  },
+  "scripts": {
+      "post-install-cmd": [
+          "npm install"
+      ],
+      "post-update-cmd": [
+          "npm install"
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html {{_s__language_attr()}} class="no-js">
+
+
+    <!--    Stefan Vandermeulen | http://netdust.be/    -->
+
+    <meta charset="{{_s__charset()}}">
+    <title>{{ _p___title() | striptags }}</title>
+
+    <link href="//www.google-analytics.com" rel="dns-prefetch">
+    <link href="{{_l__img('icons/favicon.ico')}}" rel="shortcut icon">
+    <link href="{{_l__img('icons/touch.png')}}" rel="apple-touch-icon-precomposed">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{_p__seo_description(1)}}"/>
+    <meta name="keywords" content="{{_p__keywords(1)}}"/>
+
+    {{__hook('header')}}
+
+</head>
+
+<body class="{{_p__body_class()}}">
+
+{{__hook('render.after.body')}}
+
+<!--[if lt IE 10]>
+<div style="color: #434343;text-align: center;margin-bottom: 2em;"><h1>Did you know that your Internet Explorer is out of date?</h1>To get the best possible experience using our site we recommend that you <a target="_blank" href="http://browsehappy.com/">upgrade</a> to a modern web browser.</div>
+<![endif]-->
+
+
+<!-- wrapper -->
+<div class="container px2 py4">
+    <!-- header -->
+    <header class="header px2 py4" role="banner">
+        <h4 id="handle">Navigation</h4>
+        <nav class="navigation" data-navigation-handle="#handle">
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+    <!-- /header -->
+
+    <!-- sections -->
+    {% block content %}
+    {% endblock %}
+    <!-- /sections -->
+
+    <!-- footer -->
+    <footer class="footer" role="contentinfo">
+
+        <!-- copyright -->
+        <p class="copyright">
+            {{_s__copyright()}}.
+        </p>
+        <!-- /copyright -->
+
+    </footer>
+    <!-- /footer -->
+</div>
+<!-- /wrapper -->
+
+<!-- javascript -->
+{{__hook('script')}}
+
+
+</body>
+</html>

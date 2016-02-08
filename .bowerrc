@@ -1,5 +1,6 @@
 {
-  "scripts": {
-    "postinstall": "gulp build"
-  }
+  "directory": "./bower_components",
+  "ignoredDependencies": [
+    "nestedSortable"
+  ]
 }

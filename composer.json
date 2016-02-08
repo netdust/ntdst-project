@@ -1,6 +1,6 @@
 {
-  "name": "netdust-project",
-  "description": "a netdust web project for faster development",
+  "name": "netdust-cms",
+  "description": "a project base on ntdst content manager for easy webdevelopment",
   "keywords": [
     "netdust",
     "cms",
@@ -9,9 +9,10 @@
     "bower",
     "composer",
     "less",
-    "slim-php"
+    "slim-php",
+    "backbone"
   ],
-  "homepage": "https://github.com/netdust",
+  "homepage": "https://github.com/netdust/ntdst-project",
   "license": "GPL-3.0",
   "authors": [
     {
@@ -20,19 +21,11 @@
       "homepage": "http://netdust.be"
     }
   ],
-  "type": "cms,web",
-  "archive": {
-    "exclude": ["/src", "/test*",  ".DS_Store", "*.log"]
+  "type": "cms",
+  "config": {
+    "vendor-dir": "./src/vendor"
   },
   "require": {
 
-  },
-  "scripts": {
-      "post-install-cmd": [
-          "npm install"
-      ],
-      "post-update-cmd": [
-          "npm install"
-    ]
   }
 }

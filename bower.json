@@ -32,6 +32,9 @@
     "jquery": "~2.1.3",
     "normalize.css": "~3.0.1",
     "formstone": "^0.8.38",
-    "base": "^2.8.0"
+    "schema-ui": "~2.0.1"
+  },
+  "dependencies": {
+    "Headhesive.js": "headhesive#^1.2.4"
   }
 }

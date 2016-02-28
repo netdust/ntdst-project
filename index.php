@@ -18,7 +18,7 @@ $isapi = (bool)preg_match('|/api/v.*$|', $_SERVER['REQUEST_URI']);
 if (!$iscms && !$isapi) {
     $app->get('/(:slug+)', function ($slug = '') use ($app) {
         if( $app->page == null ) $app->notFound();
-        else render(locate_template()); 
+        else render(locate_template());
     });
 }
 

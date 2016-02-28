@@ -2,43 +2,51 @@
 /* global $: true */
 "use strict";
 
-var src = './src/';
+var src = './';
+var theme = src + 'public/themes/default/';
 
 var gulp = require( "gulp" ),
 	/** @type {Object} Loader of Gulp plugins from `package.json` */
 	$ = require( "gulp-load-plugins" )({ camelize: true }),
+
+	/** @type {Object of Array} browserify settings to build from commonJS */
+	browserifyCnf = {
+		// Enable source maps
+		debug: true,
+		// Additional file extensions to make optional
+		extensions: ['.coffee', '.hbs'],
+		// A separate bundle will be generated for each
+		// bundle config in the list below
+		bundleConfigs: [{
+			entries:    theme + '/js/application.js',
+			dest:       theme + '/js',
+			outputName: 'application-build.js'
+		}/*, {
+			entries:    theme + '/js/vendor.js',
+			dest:       theme + '/js',
+			outputName: 'vendor-build.js'
+		}*/]
+	},
 	/** @type {Array} JS source files to concatenate and uglify */
 	uglifySrc = [
-		/** Modernizr */
-		src + "bower_components/modernizr/modernizr.js",
-		/** Conditionizr */
-		src + "js/lib/conditionizr-4.3.0.min.js",
 		/** jQuery */
 		src + "bower_components/jquery/dist/jquery.js",
 		/** Page scripts */
-		src + "js/scripts.js"
+		theme + "js/scripts.js"
 	],
 	/** @type {Object of Array} CSS source files to concatenate and minify */
 	cssminSrc = {
 		development: [
-			/** The banner of `style.css` */
-			src + "www/admin/front/css/banner.css",
 			/** Theme style */
-			src + "www/admin/front/css/style.css"
+			theme + "css/style.css"
 		],
 		production: [
 			/** Normalize */
 			src + "bower_components/normalize.css/normalize.css",
-			/** foundation */
-			src + "bower_components/foundation/css/foundation.css",
 			/** font-awesome */
 			src + "bower_components/components-font-awesome/css/font-awesome.css",
-			/** dropzone */
-			src + "bower_components/dropzone/dist/dropzone.css",
-			/** The banner of `style.css` */
-			src + "www/admin/front/css/banner.css",
 			/** Theme style */
-			src + "www/admin/front/css/style.css"
+			theme + "css/style.css"
 		]
 	},
 	/** @type {String} Used inside task for set the mode to 'development' or 'production' */
@@ -66,69 +74,62 @@ gulp.task( "clean", function(cb) {
 	require('del')([ ".tmp", "dist{,**}" ], cb);
 });
 
-gulp.task( "clean-dist", function(cb) {
-	require('del')([ "dist/**/*/style.css", "dist/**/*/banner.css", "dist/**/*/app-bootstrap.js", "dist/**/*/build.txt", "dist/**/*/app{,**}" ], cb);
-});
-
 /** Copy */
 gulp.task( "copy", function() {
 	return gulp.src([
-			src + "www/.htaccess",
-			src + "www/**/*.{php,html,css,js,json}",
-			src + "www/**/*.{jpg,png,svg,gif,webp,ico}",
-			src + "www/**/*.{woff,woff2,ttf,otf,eot,svg}",
-
-			"!" + src + "/www/**/*/vendor/**/*{.json,.markdown,.mdown,.md,.yml,.dist,.gitignore,examples,examples/**,tests,tests/**,test,test/**,doc,doc/**,docs,docs/**}"
+			theme + "**/*.{php,html,css,js,json}",
+			theme + "**/*.{jpg,png,svg,gif,webp,ico}",
+			theme + "**/*.{woff,woff2,ttf,otf,eot,svg}"
 		])
 		.pipe( gulp.dest( "dist" ) );
 });
 
-/** POST CSS MTF*CKR **/
-gulp.task('postcss', function () {
-	var stream = gulp.src( cssminSrc[ env ] )
-		.pipe( $.concat( "build.css" ))
-		.pipe( $.autoprefixer( "last 2 version" ) )
-		.pipe( $.postcss([$.cssnext()]) );
-
-	if ( env === "production" ) {
-		stream = stream.pipe( require('gulp-replace')('../fonts/', 'fonts/') )
-			.pipe( require('gulp-minify-css')({ keepSpecialComments: 1, roundingPrecision: 3 }) );
-	}
-
-	return stream.on( "error", function( e ) {
-			console.error( e );
-		})
-		.pipe( gulp.dest( src + 'www/admin/front/css' ) );
-});
-
 /** CSS Preprocessors */
 gulp.task( "less", function () {
-	return gulp.src( src + "css/less/style.less" )
+	return gulp.src( theme + "css/less/style.less" )
 		.pipe( $.less() )
 		.on( "error", function( e ) {
 			console.error( e );
 		})
-		.pipe(gulp.dest(  src + "css" ));
+		.pipe(gulp.dest(  theme + "css" ));
 });
 
 /** STYLES */
-gulp.task( "styles", function() {
+gulp.task( "styles", ["less"], function() {
 	console.log( "`styles` task run in `" + env + "` environment" );
 
+	// concat files into 1 css
 	var stream = gulp.src( cssminSrc[ env ] )
-		.pipe( $.concat( "build.css" ))
-		.pipe( $.autoprefixer( "last 2 version" ) );
+		.pipe( $.concat( "build.css" ));
 
+
+	// do some heavy lifting for production use
 	if ( env === "production" ) {
-		stream = stream.pipe( require('gulp-replace')('../fonts/', 'fonts/') )
-				 .pipe( require('gulp-minify-css')({ keepSpecialComments: 1, roundingPrecision: 3 }) );
+		stream = stream.pipe($.replace('../fonts/', 'fonts/') )
+				 .pipe( $.autoprefixer( "last 2 version" ) )
+				 .pipe($.minifyCss(
+					 { keepSpecialComments: 1, roundingPrecision: 3 }
+				 ));
 	}
 
 	return stream.on( "error", function( e ) {
 			console.error( e );
 		})
-		.pipe( gulp.dest( src + 'www/admin/front/css' ) );
+		.pipe( gulp.dest( theme + 'css' ) );
+
 });
+
+/** Templates */
+gulp.task( "template", function() {
+	console.log( "`template` task run in `" + env + "` environment" );
+
+	var is_debug = ( env === "production" ? "false" : "true" );
+
+	return gulp.src( src + "debug.php" )
+		.pipe( $.template({ is_debug: is_debug }) )
+		.pipe( gulp.dest( src + "www/admin/system" ) );
+});
+
 
 /** JSHint */
 gulp.task( "jshint", function () {
@@ -139,17 +140,6 @@ gulp.task( "jshint", function () {
 		.pipe( $.jshint.reporter( "fail" ) );
 });
 
-/** Templates */
-gulp.task( "template", function() {
-	console.log( "`template` task run in `" + env + "` environment" );
-
-    var is_debug = ( env === "production" ? "false" : "true" );
-
-    return gulp.src( src + "debug.php" )
-        .pipe( $.template({ is_debug: is_debug }) )
-        .pipe( gulp.dest( src + "www/admin/system" ) );
-});
-
 /** Uglify */
 gulp.task( "uglify", function() {
 	return gulp.src( uglifySrc )
@@ -158,9 +148,71 @@ gulp.task( "uglify", function() {
 		.pipe( gulp.dest( "dist/js" ) );
 });
 
-/** Build.js */
-gulp.task('buildjs', function() {
-	$.shell.task(['r.js.cmd -o build.js','gulp clean-dist', 'gulp template --env=development'])();
+/**
+ * Run JavaScript through Browserify
+ */
+gulp.task('browserify', function(callback) {
+
+	var bundleQueue = browserifyCnf.bundleConfigs.length;
+
+	var browserifyThis = function(bundleConfig) {
+
+		var bundler = require('browserify')({
+			// Required watchify args
+			cache: {}, packageCache: {}, fullPaths: false,
+			// Specify the entry point of your app
+			entries: bundleConfig.entries,
+			// Add file extentions to make optional in your requires
+			extensions: browserifyCnf.extensions,
+			// Enable source maps!
+			debug: browserifyCnf.debug
+		});
+
+		var bundle = function() {
+			// Log when bundling starts
+			console.log("Build is starting: " + bundleConfig.outputName );
+
+			return bundler
+				.bundle()
+				// Report compile errors
+				.on('error', function( e ) {
+					console.error( e );
+				})
+				// Use vinyl-source-stream to make the
+				// stream gulp compatible. Specifiy the
+				// desired output filename here.
+				.pipe(require('vinyl-source-stream')(bundleConfig.outputName))
+				// Specify the output destination
+				.pipe(gulp.dest(bundleConfig.dest))
+				.on('finish', reportFinished);
+		};
+
+		if(global.isWatching) {
+			// Wrap with watchify and rebundle on changes
+			bundler = watchify(bundler);
+			// Rebundle on update
+			bundler.on('update', bundle);
+		}
+
+		var reportFinished = function() {
+			// Log when bundling completes
+			console.log("Build is finished: " + bundleConfig.outputName );
+
+			if(bundleQueue) {
+				bundleQueue--;
+				if(bundleQueue === 0) {
+					// If queue is empty, tell gulp the task is complete.
+					// https://github.com/gulpjs/gulp/blob/master/docs/API.md#accept-a-callback
+					callback();
+				}
+			}
+		};
+
+		return bundle();
+	};
+
+	// Start bundling with Browserify for each bundleConfig specified
+	browserifyCnf.bundleConfigs.forEach(browserifyThis);
 });
 
 /** `env` to 'production' */
@@ -174,27 +226,31 @@ gulp.task( "devProduction", function() {
 });
 
 /** Livereload */
-gulp.task( "watch", [ "template", "styles" ], function() {
+gulp.task( "watch", [ "template", "browserify", "styles" ], function() {
 	$.livereload();
+
+	/** Watch for browserify */
+	gulp.watch( [
+		theme + "**/*.js"
+	], [ "browserify" ] );
+
+	/** Watch for autoprefix */
+	gulp.watch( [
+		theme + "**/*.less"
+	], [ "styles" ] );
 
 	/** Watch for livereoad */
 	gulp.watch([
-		src + "**/*.js",
-		src + "**/*.php",
-		src + "**/*.css"
+		theme + "**/*.js",
+		theme + "**/*.php",
+		theme + "**/*.css"
 	]).on( "change", function( file ) {
 		console.log( file.path );
 		$.livereload.changed( file.path );
 	});
 
-	/** Watch for autoprefix */
-	gulp.watch( [
-		src + "**/*.css",
-		src + "**/*.less"
-	], [ "styles" ] );
-
 	/** Watch for JSHint */
-	//gulp.watch( [src + "www/admin/front/**/*.js", !src + "www/admin/front/**/*/lib/*.js"], ["jshint"] );
+	gulp.watch( theme + "**/*.js", ["jshint"] );
 });
 
 /** Build */
@@ -205,11 +261,9 @@ gulp.task( "build", function () {
 		"template",
 		"styles",
 		"copy",
-		"buildjs",
 		"devProduction",
 		function() { console.log("Build is finished") }
 	);
-
 });
 
 /** Gulp default task */

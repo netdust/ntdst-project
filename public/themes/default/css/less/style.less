@@ -1,0 +1,95 @@
+@import 'bower_components/schema-ui/src/less/frame.less';
+@import 'bower_components/schema-ui/src/less/typography.less';
+@import 'bower_components/schema-ui/src/less/buttons.less';
+@import 'bower_components/schema-ui/src/less/clearfix.less';
+
+//this grid is not mobile first
+//@import 'bower_components/schema-ui/src/less/grid.less';
+@import 'bower_components/schema-ui/src/less/alerts.less';
+@import 'bower_components/schema-ui/src/less/tables.less';
+
+@import 'bower_components/schema-ui/src/less/forms.less';
+@import 'bower_components/schema-ui/src/less/dropdowns.less';
+
+@import 'bower_components/schema-ui/src/less/panel.less';
+@import 'bower_components/schema-ui/src/less/badge.less';
+@import 'bower_components/schema-ui/src/less/labels.less';
+
+
+@import 'bower_components/schema-ui/src/less/normalize.less';
+@import 'bower_components/schema-ui/src/less/helpers.less';
+
+
+@import 'bower_components/schema-ui/src/less/state.less';
+
+@import 'bower_components/schema-ui/src/less/nav.less';
+@import 'bower_components/schema-ui/src/less/listgroup.less';
+@import 'bower_components/schema-ui/src/less/btngroup_pagination.less';
+
+@import 'bower_components/schema-ui/src/less/variables.less';
+@import 'bower_components/schema-ui/src/less/mixins.less';
+
+
+@number-of-columns : 12;
+@max-width: 61.25rem;
+@gutter: 0.9375em;
+
+@bp-large: 		  ~"only screen and (min-width: 75rem)"; // > 1200px
+
+@bp-big-only:	  ~"only screen and (min-width: 61.25rem) and (max-width: 74.9375rem)"; // 980px and 1199px
+@bp-big: 		  ~"only screen and (min-width: 61.25rem)"; // > 980px
+
+@bp-medium-only:  ~"only screen and (min-width: 48rem) and (max-width: 61.1875rem)"; // 768px and 979px
+@bp-medium: 	  ~"only screen and (min-width: 48rem)"; // > 768px
+
+@bp-small-only:   ~"only screen and (max-width: 47.9375rem)"; // 767px
+@bp-small:        ~"only screen"; // < 767px
+
+@import 'grid.less';
+
+.blue-background {
+  background-color: @primary-color;
+}
+header, footer, #content>section{
+  .row;
+}
+
+div {
+  &.nav {
+    .col;
+    .blue-background;
+  }
+}
+
+.nav {
+
+}
+.header {
+  .blue-background;
+  min-width: 300px;
+  width: 100%;
+  box-shadow: none;
+  height: 50px;
+
+  &.is-shown {
+    display: block;
+  }
+  &.is-hidden {
+    display: none;
+  }
+}
+.hero {
+  background: #eee;
+  margin: 0;
+  height:50vh;
+  width: 100%;
+
+  article {
+    z-index: 99;
+    .position(50%,80%);
+  }
+}
+
+.carousel {
+  margin-top: 20px;
+}

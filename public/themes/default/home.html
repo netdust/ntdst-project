@@ -1,11 +1,67 @@
+{% extends "base.html" %}
 
-<div class="home">
+{% block content %}
+<section>
 
+    <div class="col s-6">
+        <h1>FORM</h1>
+        <form>
+            <div class="form-group">
+                <label for="emailID">Email Address</label>
+                <input type="email" class="form-element" id="emailID" placeholder="Example Email">
+            </div>
+            <div class="form-group">
+                <label for="passwordID">Example Password</label>
+                <input type="email" class="form-element" id="passwordID" placeholder="Example Password">
+            </div>
+            <div class="form-group">
+                <label for="someFile">File Input</label>
+                <input type="email" class="form-element" id="someFile">
+                <p>Some text here.</p>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox"> Check this box
+                </label>
+            </div>
+            <div class="has-warning has-icon">
+                <label>Form-element has warning message!</label>
+                <input class="form-element f-is-warning">
+                <span class="fa fa-warning"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="col s-6">
+        <div class="carousel">
+            <figure class="hero">
+                <article>
+                    <header>Title 1</header>
+                    <section>
+                        content
+                    </section>
+                </article>
+            </figure>
+            <figure class="hero">
+                <article>
+                    <header>Title 2</header>
+                    <section>
+                        content
+                    </section>
+                </article>
+            </figure>
+        </div>
+    </div>
 
-
-    {{page_content()}}
-
-    {{page_file()}}
-    {{page_test_ok()}}
-
-</div>
+</section>
+<section>
+    <div class="col s-12">
+        Een Amerikaanse rechter heeft donderdag ex-minister van Buitenlandse Zaken Hillary Clinton bevolen, alle resterende e-mails op haar private server tegen het einde van de maand vrij te geven.
+        Een Amerikaanse rechter heeft donderdag ex-minister van Buitenlandse Zaken Hillary Clinton bevolen, alle resterende e-mails op haar private server tegen het einde van de maand vrij te geven.
+        Een Amerikaanse rechter heeft donderdag ex-minister van Buitenlandse Zaken Hillary Clinton bevolen, alle resterende e-mails op haar private server tegen het einde van de maand vrij te geven.
+        Een Amerikaanse rechter heeft donderdag ex-minister van Buitenlandse Zaken Hillary Clinton bevolen, alle resterende e-mails op haar private server tegen het einde van de maand vrij te geven.
+        Een Amerikaanse rechter heeft donderdag ex-minister van Buitenlandse Zaken Hillary Clinton bevolen, alle resterende e-mails op haar private server tegen het einde van de maand vrij te geven.
+        Een Amerikaanse rechter heeft donderdag ex-minister van Buitenlandse Zaken Hillary Clinton bevolen, alle resterende e-mails op haar private server tegen het einde van de maand vrij te geven.
+    </div>
+</section>
+{% endblock %}

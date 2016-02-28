@@ -19,9 +19,17 @@
     "less",
     "slim-php"
   ],
+  "browserify": {
+    "transform": ["browserify-shim"]
+  },
+  "browserify-shim": {
+    "jquery": "global:$"
+  },
   "main": "gulpfile.js",
   "private": true,
   "devDependencies": {
+    "browserify": "^13.0.0",
+    "browserify-shim": "^3.8.12",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
     "gulp-autoprefixer": "^3.1.0",
@@ -34,6 +42,7 @@
     "gulp-shell": "^0.4.0",
     "gulp-template": "^1.0.0",
     "jshint-stylish": "^2.1.0",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
